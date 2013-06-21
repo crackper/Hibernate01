@@ -6,7 +6,12 @@ package hibernatenormal;
 
 import hibernatenormal.DAO.ContactoDAO;
 import hibernatenormal.entidades.Contacto;
+import hibernatenormal.entidades.Direccion;
+import hibernatenormal.entidades.Participante;
+import hibernatenormal.entidades.Persona;
+import hibernatenormal.entidades.Taller;
 import java.util.List;
+import org.hibernate.Session;
 
 /**
  *
@@ -52,5 +57,65 @@ public class HibernateNormal {
         { 
             System.out.println("-> " + c.getNombre()); 
         } 
+        
+        Persona persona1 = new Persona(); 
+        persona1.setNombre("Persona que sera borrada");  
+
+        Persona persona2 = new Persona(); 
+        persona2.setNombre("Persona que permanecera");  
+
+        Direccion direccion1 = new Direccion(); 
+        direccion1.setCalle("Calle 1"); 
+        direccion1.setCodigoPostal("12345");  
+
+        Direccion direccion2 = new Direccion(); 
+        direccion2.setCalle("Calle 2"); 
+        direccion2.setCodigoPostal("54321");  
+
+        persona1.setDireccion(direccion1); 
+        persona2.setDireccion(direccion2);  
+
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+    
+        Direccion d = new Direccion(); 
+        d.setCalle("Calle de Prueba de identificadores"); 
+        d.setCodigoPostal("21345");  
+        
+        sesion.beginTransaction();
+        sesion.persist(d);
+        sesion.persist(persona1);
+        sesion.persist(persona2);
+        
+        sesion.getTransaction().commit();
+        sesion.close();
+         
+        sesion = HibernateUtil.getSessionFactory().openSession(); 
+        sesion.beginTransaction();  
+
+        sesion.delete(persona1);  
+
+        sesion.getTransaction().commit(); 
+        sesion.close(); 
+        
+        //////////////////////////////////////////
+        
+        sesion = HibernateUtil.getSessionFactory().openSession();
+        sesion.beginTransaction();  
+        Participante estu = new Participante();
+        estu.setApellidos("Mestanza");
+        estu.setNombre("Samuel");
+        estu.setProcedencia("UNC");
+        
+        Taller taller = new Taller();
+        taller.setDescripcion("C# Basico");
+        taller.setActivo(true);
+        
+        estu.addTaller(taller);       
+        sesion.persist(estu);
+
+        sesion.getTransaction().commit(); 
+        sesion.close(); 
+        
+        
     }
 }

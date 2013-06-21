@@ -4,6 +4,7 @@
  */
 package hibernatenormal.DAO;
 
+import hibernatenormal.HibernateUtil;
 import hibernatenormal.entidades.Contacto;
 import java.util.List;
 import org.hibernate.HibernateException;
